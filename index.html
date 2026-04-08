@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banker's Algorithm — OS Deadlock Avoidance</title>
+  <meta name="description" content="Interactive Banker's Algorithm simulator with real-time computation transparency. Visualises safe state detection, need matrix derivation, and safe sequence animation.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ══ Header ══════════════════════════════════ -->
+  <header class="site-header">
+    <div class="header-brand">
+      <h1>Banker's <em>Algorithm</em></h1>
+      <p>Deadlock Avoidance · Operating Systems</p>
+    </div>
+    <div class="header-meta">
+      <span class="meta-chip">v1.0</span>
+      <span class="meta-chip">OS / Concurrency</span>
+      <span class="meta-chip">Pure JS</span>
+    </div>
+  </header>
+
+  <!-- ══ 1. Configuration ════════════════════════ -->
+  <section class="section" style="animation-delay:0.05s">
+    <div class="section-header">
+      <span class="section-label">01 · Configuration</span>
+      <div class="section-line"></div>
+      <span class="section-badge badge-stone">Setup</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="icon icon-stone">⚙</span>
+        System Parameters
+      </div>
+
+      <div class="config-row">
+        <div class="field-group">
+          <label class="field-label" for="cfg-proc">Processes (n)</label>
+          <input class="field-input" id="cfg-proc" type="number" min="1" max="8" value="5">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="cfg-res">Resource Types (m)</label>
+          <input class="field-input" id="cfg-res" type="number" min="1" max="5" value="3">
+        </div>
+        <div class="config-actions">
+          <button class="btn btn-primary" id="btn-build">Build Tables</button>
+          <button class="btn btn-ghost" data-preset="classic">Classic Example</button>
+          <button class="btn btn-ghost" data-preset="small">Small (3P×2R)</button>
+          <button class="btn btn-ghost" data-preset="unsafe">Unsafe Demo</button>
+        </div>
+      </div>
+      <p class="hint">Max 8 processes · 5 resource types. Presets load validated examples immediately.</p>
+    </div>
+  </section>
+
+  <!-- ══ 2. Input Matrices ════════════════════════ -->
+  <div id="tables-section" class="hidden">
+
+    <section class="section" style="animation-delay:0.10s">
+      <div class="section-header">
+        <span class="section-label">02 · Input Matrices</span>
+        <div class="section-line"></div>
+        <span class="section-badge badge-terra">Editable</span>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">
+          <span class="icon icon-amber">≡</span>
+          Available Resources
+        </div>
+        <div class="matrix-scroll">
+          <table class="matrix-table" id="avail-table"></table>
+        </div>
+        <p class="hint">Units of each resource type currently unallocated.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">
+            <span class="icon icon-terra">A</span>
+            Allocation Matrix
+          </div>
+          <div class="matrix-scroll">
+            <table class="matrix-table" id="alloc-table"></table>
+          </div>
+          <p class="hint">Resources currently held by each process.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span class="icon icon-stone">M</span>
+            Maximum Matrix
+          </div>
+          <div class="matrix-scroll">
+            <table class="matrix-table" id="max-table"></table>
+          </div>
+          <p class="hint">Maximum resources a process may ever request.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3. Need Matrix (live-computed) ══════════ -->
+    <section class="section hidden" id="need-section" style="animation-delay:0.15s">
+      <div class="section-header">
+        <span class="section-label">03 · Need Matrix</span>
+        <div class="section-line"></div>
+        <span class="section-badge badge-amber">Auto-computed · Need = Max − Allocation</span>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span class="icon icon-amber">N</span>
+          Remaining Need  <small style="font-weight:400;color:var(--text-muted);font-family:var(--font-mono);font-size:0.78rem;margin-left:6px">updates live as you type</small>
+        </div>
+        <div class="matrix-scroll">
+          <table class="matrix-table" id="need-table"></table>
+        </div>
+        <p class="hint">
+          <span style="color:var(--sage)">■ Green</span> = resources still needed &nbsp;·&nbsp;
+          <span style="color:var(--stone)">■ Grey</span> = no additional need &nbsp;·&nbsp;
+          <span style="color:var(--rust)">■ Red</span> = allocation exceeds max (error)
+        </p>
+      </div>
+    </section>
+
+    <!-- ══ 4. Run ══════════════════════════════════ -->
+    <section class="section" style="animation-delay:0.20s">
+      <div class="section-header">
+        <span class="section-label">04 · Safety Check</span>
+        <div class="section-line"></div>
+        <span class="section-badge badge-sage">Algorithm</span>
+      </div>
+
+      <div class="card">
+        <div id="error-box" class="hidden" style="padding:10px 14px;background:var(--rust-pale);border:1px solid rgba(139,58,34,0.25);border-radius:var(--r-sm);font-size:0.82rem;color:var(--rust);font-family:var(--font-mono);margin-bottom:14px"></div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-success" id="btn-run" style="font-size:1rem;padding:12px 32px">
+            ▶ Run Safety Algorithm
+          </button>
+          <button class="btn btn-ghost" id="btn-reset">↺ Reset</button>
+        </div>
+        <p class="hint" style="margin-top:12px">
+          Executes the Banker's safety algorithm. All intermediate Work values and per-process decisions appear in the Computation Log below.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══ 5. Result ══════════════════════════════ -->
+    <section class="section" id="result-section" style="animation-delay:0.25s">
+      <div class="section-header">
+        <span class="section-label">05 · Result</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div id="result-banner" class="result-banner result-idle">
+        <div class="result-icon-wrap">⏳</div>
+        <div class="result-text">
+          <h2>Awaiting analysis</h2>
+          <p>Configure matrices and click <em>Run Safety Algorithm</em>.</p>
+        </div>
+      </div>
+
+      <!-- Safe sequence -->
+      <div id="seq-section" class="hidden" style="margin-top:16px">
+        <div class="card">
+          <div class="card-title">
+            <span class="icon icon-sage">→</span>
+            Safe Execution Sequence
+          </div>
+          <div id="seq-flow" class="seq-flow"></div>
+          <p class="hint" style="margin-top:12px">Processes can execute in this order without risk of deadlock.</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row" style="margin-top:14px">
+        <div class="stat-card">
+          <span class="stat-num" id="stat-processes">—</span>
+          <span class="stat-label">Processes</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-resources">—</span>
+          <span class="stat-label">Resource Types</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-allocated">—</span>
+          <span class="stat-label">Total Allocated</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-available">—</span>
+          <span class="stat-label">Total Available</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 6. Computation Log ══════════════════════ -->
+    <section class="section" style="animation-delay:0.30s">
+      <div class="section-header">
+        <span class="section-label">06 · Computation Log</span>
+        <div class="section-line"></div>
+        <span class="section-badge badge-stone">Transparent · Every step shown</span>
+      </div>
+
+      <div class="debug-panel">
+        <div class="debug-header">
+          <div class="debug-dot idle"></div>
+          <h3>Execution Trace — intermediate values · work vector · per-process decisions</h3>
+        </div>
+        <div class="debug-body" id="debug-body">
+          <div style="color:#6b5d4f;font-size:0.78rem;padding:4px 0;opacity:0.6">
+            — run the algorithm to see the full computation trace —
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /tables-section -->
+
+  <!-- ══ Algorithm Reference ════════════════════ -->
+  <section class="section" style="animation-delay:0.12s;margin-top:32px">
+    <div class="section-header">
+      <span class="section-label">Reference</span>
+      <div class="section-line"></div>
+      <span class="section-badge badge-stone">Concepts</span>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title" style="font-family:var(--font-display)">How it works</div>
+        <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.8">
+          <p>The Banker's Algorithm tests whether the current state is <strong>safe</strong> — i.e., whether there exists a sequence in which all processes can complete without deadlock.</p>
+          <br>
+          <p>It simulates resource allocation by checking if a process's remaining <em>Need</em> can be satisfied by currently available resources. If yes, it "runs" and releases its allocation back to the work pool.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="font-family:var(--font-display)">Key definitions</div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);line-height:1.9;font-family:var(--font-mono)">
+          <div><span style="color:var(--terra);font-weight:500">Need[i][j]</span> = Max[i][j] − Allocation[i][j]</div>
+          <div><span style="color:var(--sage);font-weight:500">Work</span> = Available (grows as processes finish)</div>
+          <div><span style="color:var(--amber);font-weight:500">Finish[i]</span> = true when P<sub>i</sub> has completed</div>
+          <div><span style="color:var(--stone);font-weight:500">Safe</span> = all Finish[i] = true after simulation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    Banker's Algorithm · Dijkstra 1965 · Implemented in modular vanilla JS
+    <br style="margin-bottom:4px">
+    banker.js · ui.js · app.js · style.css — no dependencies, no build step
+  </footer>
+
+</div><!-- /app-wrapper -->
+
+<!-- Scripts: load order matters -->
+<script src="banker.js"></script>       
+<script src="ui.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
