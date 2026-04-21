@@ -272,3 +272,42 @@ const UI = (() => {
 })();
 
 if (typeof module !== 'undefined') module.exports = UI;
+
+/* Theme & Font controls — persistence and application */
+(function ThemeAndFont(){
+  const root = document.documentElement;
+  function applyTheme(theme){
+    if(theme === 'dark') root.setAttribute('data-theme','dark');
+    else root.removeAttribute('data-theme');
+    try { localStorage.setItem('theme', theme); } catch(e){}
+  }
+
+  const fontMap = {
+    default: { display: "'Lora', Georgia, serif", body: "'Outfit', sans-serif", mono: "'DM Mono', monospace" },
+    serif:   { display: "'Lora', Georgia, serif", body: "'Lora', Georgia, serif", mono: "'DM Mono', monospace" },
+    sans:    { display: "'Lora', Georgia, serif", body: "'Outfit', sans-serif", mono: "'DM Mono', monospace" },
+    mono:    { display: "'Lora', Georgia, serif", body: "'DM Mono', monospace", mono: "'DM Mono', monospace" }
+  };
+
+  function applyFont(choice){
+    const cfg = fontMap[choice] || fontMap.default;
+    root.style.setProperty('--font-display', cfg.display);
+    root.style.setProperty('--font-body', cfg.body);
+    root.style.setProperty('--font-mono', cfg.mono);
+    try { localStorage.setItem('fontChoice', choice); } catch(e){}
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('theme-toggle');
+    const select = document.getElementById('font-select');
+
+    const savedTheme = (function(){ try { return localStorage.getItem('theme') || 'light'; } catch(e){ return 'light'; } })();
+    const savedFont  = (function(){ try { return localStorage.getItem('fontChoice') || 'default'; } catch(e){ return 'default'; } })();
+
+    applyTheme(savedTheme);
+    applyFont(savedFont);
+
+    if(select){ select.value = savedFont; select.addEventListener('change', e => applyFont(e.target.value)); }
+    if(toggle){ toggle.checked = (savedTheme === 'dark'); toggle.addEventListener('change', e => applyTheme(e.target.checked ? 'dark' : 'light')); }
+  });
+})();

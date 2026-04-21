@@ -11,7 +11,6 @@
 
 <div class="app-wrapper">
 
-  <!-- ══ Header ══════════════════════════════════ -->
   <header class="site-header">
     <div class="header-brand">
       <h1>Banker's <em>Algorithm</em></h1>
@@ -21,10 +20,23 @@
       <span class="meta-chip">v1.0</span>
       <span class="meta-chip">OS / Concurrency</span>
       <span class="meta-chip">Pure JS</span>
+      <div class="theme-controls">
+        <label class="toggle-row">
+          <input id="theme-toggle" type="checkbox">
+          <span class="toggle-switch"></span>
+          <span style="margin-left:6px">Dark</span>
+        </label>
+
+        <select id="font-select" class="font-select" aria-label="Font style">
+          <option value="default">Default</option>
+          <option value="serif">Serif</option>
+          <option value="sans">Sans</option>
+          <option value="mono">Monospace</option>
+        </select>
+      </div>
     </div>
   </header>
 
-  <!-- ══ 1. Configuration ════════════════════════ -->
   <section class="section" style="animation-delay:0.05s">
     <div class="section-header">
       <span class="section-label">01 · Configuration</span>
@@ -58,7 +70,6 @@
     </div>
   </section>
 
-  <!-- ══ 2. Input Matrices ════════════════════════ -->
   <div id="tables-section" class="hidden">
 
     <section class="section" style="animation-delay:0.10s">
@@ -104,7 +115,6 @@
       </div>
     </section>
 
-    <!-- ══ 3. Need Matrix (live-computed) ══════════ -->
     <section class="section hidden" id="need-section" style="animation-delay:0.15s">
       <div class="section-header">
         <span class="section-label">03 · Need Matrix</span>
@@ -128,7 +138,6 @@
       </div>
     </section>
 
-    <!-- ══ 4. Run ══════════════════════════════════ -->
     <section class="section" style="animation-delay:0.20s">
       <div class="section-header">
         <span class="section-label">04 · Safety Check</span>
@@ -151,7 +160,6 @@
       </div>
     </section>
 
-    <!-- ══ 5. Result ══════════════════════════════ -->
     <section class="section" id="result-section" style="animation-delay:0.25s">
       <div class="section-header">
         <span class="section-label">05 · Result</span>
@@ -178,7 +186,6 @@
         </div>
       </div>
 
-      <!-- Stats -->
       <div class="stats-row" style="margin-top:14px">
         <div class="stat-card">
           <span class="stat-num" id="stat-processes">—</span>
@@ -199,7 +206,6 @@
       </div>
     </section>
 
-    <!-- ══ 6. Computation Log ══════════════════════ -->
     <section class="section" style="animation-delay:0.30s">
       <div class="section-header">
         <span class="section-label">06 · Computation Log</span>
@@ -220,9 +226,8 @@
       </div>
     </section>
 
-  </div><!-- /tables-section -->
+  </div>
 
-  <!-- ══ Algorithm Reference ════════════════════ -->
   <section class="section" style="animation-delay:0.12s;margin-top:32px">
     <div class="section-header">
       <span class="section-label">Reference</span>
@@ -258,9 +263,8 @@
     banker.js · ui.js · app.js · style.css — no dependencies, no build step
   </footer>
 
-</div><!-- /app-wrapper -->
+</div>
 
-<!-- Scripts: load order matters -->
 <script src="banker.js"></script>       
 <script src="ui.js"></script>
 <script src="app.js"></script>

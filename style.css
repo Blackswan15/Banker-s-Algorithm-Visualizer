@@ -8,6 +8,7 @@
 
 /* ── Design Tokens ───────────────────────────── */
 :root {
+  --base-font-size: 18px;
   /* Backgrounds */
   --bg-page:        #f5f0e8;
   --bg-surface:     #faf7f2;
@@ -16,10 +17,10 @@
   --bg-panel:       #f0ebe0;
 
   /* Text */
-  --text-primary:   #2c2418;
-  --text-secondary: #6b5d4f;
-  --text-muted:     #9c8c7c;
-  --text-caption:   #b8a898;
+  --text-primary:   #111827; /* brighter, high-contrast */
+  --text-secondary: #374151;
+  --text-muted:     #6b7280;
+  --text-caption:   #9ca3af;
 
   /* Accents */
   --terra:          #c1562a;   /* terracotta — primary action */
@@ -67,8 +68,8 @@ body {
   font-family: var(--font-body);
   background: var(--bg-page);
   color: var(--text-primary);
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: var(--base-font-size);
+  line-height: 1.75;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
@@ -118,7 +119,7 @@ body::before {
 }
 .header-brand p {
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-top: 6px;
@@ -135,7 +136,7 @@ body::before {
   padding: 4px 10px;
   border-radius: 20px;
   border: 1px solid var(--border);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   background: var(--bg-card);
   letter-spacing: 0.04em;
 }
@@ -311,7 +312,7 @@ body::before {
 }
 .matrix-table th {
   background: var(--bg-panel);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -492,7 +493,7 @@ body::before {
 .result-unsafe .result-text h2 { color: var(--rust); }
 .result-text p {
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-top: 4px;
 }
 
@@ -559,7 +560,7 @@ body::before {
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-top: 2px;
 }
 
@@ -582,7 +583,7 @@ body::before {
 /* ── Tooltip ──────────────────────────────────── */
 .hint {
   font-size: 0.75rem;
-  color: var(--text-caption);
+  color: var(--text-secondary);
   margin-top: 8px;
   font-family: var(--font-mono);
 }
@@ -658,3 +659,59 @@ input[type="checkbox"]:checked + .toggle-switch::after {
   background: #fff;
 }
 input[type="checkbox"] { display: none; }
+
+/* Theme controls */
+.theme-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.font-select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  outline: none;
+}
+
+/* Smooth transitions for theme switch */
+body { transition: background 220ms var(--ease), color 220ms var(--ease); }
+
+/* Dark theme: overrides design tokens */
+[data-theme="dark"] {
+  --bg-page:    #0f1720;
+  --bg-surface: #0b1220;
+  --bg-card:    #0b1220;
+  --bg-muted:   #0a131a;
+  --bg-panel:   #0a1216;
+
+  --text-primary:   #f8fafc; /* ensure bright, readable text on dark bg */
+  --text-secondary: #d1e6f0;
+  --text-muted:     #9fb6c6;
+  --text-caption:   #94a7b6;
+
+  --border:         rgba(255,255,255,0.06);
+  --border-accent:  rgba(255,138,101,0.10);
+  --border-sage:    rgba(139,197,165,0.08);
+
+  --shadow-sm:      0 2px 8px rgba(2,6,23,0.6);
+  --shadow-md:      0 8px 32px rgba(2,6,23,0.6);
+
+  --terra:          #ff8a65;
+  --terra-light:    #ffab91;
+  --terra-pale:     rgba(255,138,101,0.06);
+  --sage:           #7dd3a6;
+  --sage-light:     #9be6bb;
+  --sage-pale:      rgba(125,211,166,0.06);
+  --amber:          #ffc269;
+  --amber-pale:     rgba(255,194,105,0.06);
+  --rust:           #ff7961;
+  --rust-pale:      rgba(255,121,97,0.06);
+  --stone:          #9aa6b2;
+  --stone-pale:     rgba(154,166,178,0.04);
+}
