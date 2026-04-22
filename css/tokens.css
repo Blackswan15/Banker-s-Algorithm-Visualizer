@@ -1,0 +1,85 @@
+/* tokens.css — Design Tokens · Reset · Layout */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+  --base-font-size: 18px;
+
+  --bg-page:    #f5f0e8;
+  --bg-surface: #faf7f2;
+  --bg-card:    #fffdf9;
+  --bg-muted:   #ede8df;
+  --bg-panel:   #f0ebe0;
+
+  --text-primary:   #111827;
+  --text-secondary: #374151;
+  --text-muted:     #6b7280;
+  --text-caption:   #9ca3af;
+
+  --terra:       #c1562a;
+  --terra-light: #e8896a;
+  --terra-pale:  #f5d9ce;
+  --sage:        #6b8a6e;
+  --sage-light:  #9bb89e;
+  --sage-pale:   #d8e8da;
+  --amber:       #c87c2a;
+  --amber-pale:  #f5e4c8;
+  --rust:        #8b3a22;
+  --rust-pale:   #f0d0c5;
+  --stone:       #8c7b6a;
+  --stone-pale:  #e8e0d5;
+
+  --border:        rgba(140,123,106,0.22);
+  --border-accent: rgba(193,86,42,0.30);
+  --border-sage:   rgba(107,138,110,0.30);
+
+  --shadow-sm: 0 1px 4px rgba(44,36,24,0.08);
+  --shadow-md: 0 4px 16px rgba(44,36,24,0.10);
+  --shadow-lg: 0 8px 32px rgba(44,36,24,0.12);
+
+  --font-display: 'Lora', Georgia, serif;
+  --font-body:    'Outfit', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-size: var(--base-font-size);
+  line-height: 1.75;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background 220ms var(--ease), color 220ms var(--ease);
+}
+
+/* Grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+.app-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+.hidden  { display: none !important; }
+.visible { display: block; }
