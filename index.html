@@ -149,7 +149,7 @@
           <button class="btn btn-ghost" id="btn-reset">↺ Reset</button>
         </div>
         <p class="hint" style="margin-top:12px">
-          Executes the Banker's safety algorithm. All intermediate Work values and per-process decisions appear in the Computation Log below.
+          Executes the Banker's safety algorithm and shows a concise summary of results.
         </p>
       </div>
     </section>
@@ -196,25 +196,6 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-header">
-        <span class="section-label">06 · Computation Log</span>
-        <div class="section-line"></div>
-        <span class="section-badge badge-stone">Transparent · Every step shown</span>
-      </div>
-      <div class="debug-panel">
-        <div class="debug-header">
-          <div class="debug-dot idle"></div>
-          <h3>Execution Trace — intermediate values · work vector · per-process decisions</h3>
-        </div>
-        <div class="debug-body" id="debug-body">
-          <div style="color:#6b5d4f;font-size:0.78rem;padding:4px 0;opacity:0.6">
-            — run the algorithm to see the full computation trace —
-          </div>
-        </div>
-      </div>
-    </section>
-
   </div>
 
   <section class="section" style="margin-top:32px">
@@ -243,12 +224,6 @@
       </div>
     </div>
   </section>
-
-  <footer class="site-footer">
-    Banker's Algorithm · Dijkstra 1965 · Modular vanilla JS
-    <br style="margin-bottom:4px">
-    js/ (events · presets · banker · ui · theme · app) · css/ (tokens · components · results · dark)
-  </footer>
 
 </div>
 

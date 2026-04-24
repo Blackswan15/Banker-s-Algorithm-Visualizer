@@ -146,8 +146,9 @@ const UI = (() => {
   /* Debug / computation log */
   function appendLog(result, dot) {
     const body = $('debug-body');
+    if (!body) return; // debug panel removed — no-op when absent
     const steps = result.steps || [];
-    dot.className = 'debug-dot';
+    if (dot) dot.className = 'debug-dot';
     const typeMap = { ok: 'log-ok', wait: 'log-fail', info: 'log-info', safe: 'log-ok', unsafe: 'log-fail' };
 
     steps.forEach((s, i) => {
@@ -160,15 +161,17 @@ const UI = (() => {
         body.scrollTop = body.scrollHeight;
         if (i === steps.length - 1) {
           const last = steps[steps.length - 1];
-          dot.className = `debug-dot ${last.type === 'safe' ? 'safe' : last.type === 'unsafe' ? 'unsafe' : ''}`;
+          if (dot) dot.className = `debug-dot ${last.type === 'safe' ? 'safe' : last.type === 'unsafe' ? 'unsafe' : ''}`;
         }
       }, i * 90);
     });
   }
 
   function clearLog() {
-    $('debug-body').innerHTML = '';
-    document.querySelector('.debug-dot').className = 'debug-dot idle';
+    const body = $('debug-body');
+    if (body) body.innerHTML = '';
+    const dotEl = document.querySelector('.debug-dot');
+    if (dotEl) dotEl.className = 'debug-dot idle';
   }
 
   return {
