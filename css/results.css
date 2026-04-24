@@ -1,68 +1,6 @@
 /* results.css — Debug Panel · Log · Result Banner · Sequence · Stats · Animations */
 
-/* Debug / Computation Panel */
-.debug-panel {
-  background: #1e1612;
-  border: 1px solid rgba(193,86,42,0.25);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  font-family: var(--font-mono);
-}
-.debug-header {
-  background: rgba(193,86,42,0.12);
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid rgba(193,86,42,0.20);
-}
-.debug-header h3 {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--terra-light);
-  font-weight: 400;
-}
-.debug-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--terra-light);
-  animation: debugPulse 2s ease-in-out infinite;
-}
-.debug-dot.idle   { background: var(--stone); animation: none; }
-.debug-dot.safe   { background: var(--sage-light); animation: none; }
-.debug-dot.unsafe { background: #c85050; animation: none; }
-
-.debug-body {
-  padding: 14px 18px;
-  max-height: 280px;
-  overflow-y: auto;
-  font-size: 0.78rem;
-  line-height: 1.8;
-}
-.debug-body::-webkit-scrollbar       { width: 4px; }
-.debug-body::-webkit-scrollbar-track  { background: transparent; }
-.debug-body::-webkit-scrollbar-thumb  { background: rgba(193,86,42,0.3); border-radius: 4px; }
-
-/* Log lines */
-.log-line {
-  padding: 3px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity 0.25s, transform 0.25s;
-}
-.log-line.visible { opacity: 1; transform: translateX(0); }
-.log-step { color: #6b5d4f; font-size: 0.68rem; width: 50px; flex-shrink: 0; }
-.log-msg  { color: #c8b8a8; flex: 1; }
-.log-ok   .log-msg  { color: #9bb89e; }
-.log-fail .log-msg  { color: #c87070; }
-.log-info .log-msg  { color: #d4aa78; }
-.log-proc { color: var(--terra-light); font-weight: 500; }
+/* Debug panel removed (computation log was deleted from markup). */
 
 /* Result Banner */
 .result-banner {
